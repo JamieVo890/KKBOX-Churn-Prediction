@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-def get_requirements(file_path:str)->List[str]:
+def get_requirements(file_path:str)->list[str]:
     """
     This function will return the list of requirements
     """
@@ -18,7 +18,7 @@ def get_requirements(file_path:str)->List[str]:
 setup(
     name="KKBOX_Churn_Classifier",
     version='0.0.1',
-    author='Krish',
+    author='Jamie',
     packages=find_packages(),
     install_requires=get_requirements('requirements.txt')
 )
