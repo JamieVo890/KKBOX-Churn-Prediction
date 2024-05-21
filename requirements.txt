@@ -4,5 +4,6 @@ seaborn
 scikit-learn
 xgboost
 catboost
+pyYAML
 
 -e .
