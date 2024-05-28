@@ -1,4 +1,3 @@
-import os
 import zipfile
 import sys
 from src.entity.config_entity import DataIngestionConfig
