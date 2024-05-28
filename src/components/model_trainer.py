@@ -9,6 +9,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
 import mlflow
 import pickle
 
@@ -57,7 +58,7 @@ class ModelTraining:
         final_model = model(**params)
         final_model.fit(X,y)
         return final_model
-    
+
     def initiate_model_training(self):
         logging.info("Starting Model Training")
         try:
@@ -86,6 +87,11 @@ class ModelTraining:
                 final_model = self.train_final_model(RandomForestClassifier(), random_forest_grid.best_params_, X_train, y_train)
             else:
                 final_model = self.train_final_model(XGBClassifier, XGBoost_grid.best_params_, X_train, y_train)
+
+            # Evaluate final model on test set
+            preds = final_model.predict(X_test)
+            accuracy = accuracy_score(y_test,preds)
+            logging.info(f"Final model test set accuracy: {accuracy}")
 
             # Save the final model to a pickle file
             model_filename = self.train_config.final_model_path
