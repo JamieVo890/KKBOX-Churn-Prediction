@@ -12,6 +12,7 @@ build:
 train:
   stage: train
   script:
+    - PWD
     - docker run -v ${PWD}/artifacts:/app/artifacts -v ${PWD}/logs:/app/logs -v ${PWD}/mlruns:/app/mlruns -v ${PWD}/config/:/app/config -v ${PWD}/params:/app/params  -v ${PWD}/source_files:/app/source_files training_pipeline
   artifacts:
     paths:
