@@ -12,7 +12,7 @@ build:
 train:
   stage: train
   script:
-    - export PARENT_DIR=$(pwd)/..
+    - $PARENT_DIR = Split-Path -Parent (Get-Location)
     - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/mlruns:/app/mlruns -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/params:/app/params  -v $PARENT_DIR/source_files:/app/source_files training_pipeline
   artifacts:
     paths:
@@ -21,5 +21,5 @@ train:
 deploy:
   stage: deploy
   script:
-    - export PARENT_DIR=$(pwd)/..
+    - $PARENT_DIR = Split-Path -Parent (Get-Location)
     - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs prediction_pipeline
