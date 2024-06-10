@@ -9,7 +9,6 @@ build:
   script:
     - docker buildx build -t training_pipeline -f training.Dockerfile .
     - docker buildx build -t prediction_pipeline -f prediction.Dockerfile .
-    # - docker build -t evaluation-script:latest ./evaluation
 
 
 # Training stage
