@@ -3,7 +3,6 @@ stages:
   - train
   - deploy
 
-# Build stage
 build:
   stage: build
   script:
@@ -11,7 +10,6 @@ build:
     - docker buildx build -t prediction_pipeline -f prediction.Dockerfile .
 
 
-# Training stage
 train:
   stage: train
   script:
