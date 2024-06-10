@@ -6,5 +6,6 @@ xgboost
 catboost
 pyYAML
 mlflow
+flask
 
 -e .

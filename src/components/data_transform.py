@@ -11,18 +11,19 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 import numpy as np
 
 class DataTransform:
-    def __init__(self):
-        config = read_yaml(Path("config/config.yaml"))
-        self.transform_config = DataTransformConfig(
-            root_dir = config["data_transform"]["root_dir"],
-            raw_members_data_path = config["data_transform"]["raw_members_data_path"],
-            raw_transactions_data_path = config["data_transform"]["raw_transactions_data_path"],
-            raw_user_logs_data_path = config["data_transform"]["raw_user_logs_data_path"],
-            raw_train_data_path = config["data_transform"]["raw_train_data_path"],
-            final_X_train_data_path = config["data_transform"]["final_X_train_data_path"],
-            final_X_test_data_path = config["data_transform"]["final_X_test_data_path"],
-            y_train_data_path = config["data_transform"]["y_train_data_path"],
-            y_test_data_path = config["data_transform"]["y_test_data_path"]
+    def __init__(self, training=True):
+        if training:
+            config = read_yaml(Path("config/config.yaml"))
+            self.transform_config = DataTransformConfig(
+                root_dir = config["data_transform"]["root_dir"],
+                raw_members_data_path = config["data_transform"]["raw_members_data_path"],
+                raw_transactions_data_path = config["data_transform"]["raw_transactions_data_path"],
+                raw_user_logs_data_path = config["data_transform"]["raw_user_logs_data_path"],
+                raw_train_data_path = config["data_transform"]["raw_train_data_path"],
+                final_X_train_data_path = config["data_transform"]["final_X_train_data_path"],
+                final_X_test_data_path = config["data_transform"]["final_X_test_data_path"],
+                y_train_data_path = config["data_transform"]["y_train_data_path"],
+                y_test_data_path = config["data_transform"]["y_test_data_path"]
         )
 
     def load_data(self):
@@ -114,7 +115,7 @@ class DataTransform:
             X = merged_dataset.drop("is_churn", axis=1)
             y = merged_dataset["is_churn"]
 
-
+    
             X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2)
 
             categorical_var = ["payment_method_id", "city", "registered_via"]
