@@ -12,8 +12,8 @@ build:
 train:
   stage: train
   script:
-    - PWD
-    - docker run -v ${PWD}/artifacts:/app/artifacts -v ${PWD}/logs:/app/logs -v ${PWD}/mlruns:/app/mlruns -v ${PWD}/config/:/app/config -v ${PWD}/params:/app/params  -v ${PWD}/source_files:/app/source_files training_pipeline
+    - export PARENT_DIR=$(pwd)/..
+    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/mlruns:/app/mlruns -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/params:/app/params  -v $PARENT_DIR/source_files:/app/source_files training_pipeline
   artifacts:
     paths:
       - model/
@@ -21,4 +21,5 @@ train:
 deploy:
   stage: deploy
   script:
-    - docker run -v ${PWD}/artifacts:/app/artifacts -v ${PWD}/logs:/app/logs prediction_pipeline
+    - export PARENT_DIR=$(pwd)/..
+    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs prediction_pipeline
