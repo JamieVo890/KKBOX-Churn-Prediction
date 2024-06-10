@@ -1,7 +1,6 @@
 stages:
   - build
   - train
-  # - evaluate
   - deploy
 
 # Build stage
@@ -24,18 +23,6 @@ train:
   only:
     - master
 
-# # Evaluation stage
-# evaluate:
-#   stage: evaluate
-#   script:
-#     - docker run --rm -v $(pwd)/model:/app/model evaluation-script:latest
-#   artifacts:
-#     paths:
-#       - evaluation_results/
-#   only:
-#     - master
-
-# Deploy stage (for prediction pipeline)
 deploy:
   stage: deploy
   script:
