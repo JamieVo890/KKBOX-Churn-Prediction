@@ -16,12 +16,8 @@ train:
   artifacts:
     paths:
       - model/
-  only:
-    - master
 
 deploy:
   stage: deploy
   script:
     - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs prediction_pipeline
-  only:
-    - master
