@@ -1,0 +1,44 @@
+stages:
+  - build
+  - train
+  # - evaluate
+  - deploy
+
+# Build stage
+build:
+  stage: build
+  script:
+    - docker buildx build -t training_pipeline -f training.Dockerfile .
+    - docker buildx build -t prediction_pipeline -f prediction.Dockerfile .
+    # - docker build -t evaluation-script:latest ./evaluation
+
+
+# Training stage
+train:
+  stage: train
+  script:
+    - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs -v %cd%/mlruns:/app/mlruns -v %cd%/config/:/app/config -v %cd%/params:/app/params  -v %cd%/source_files:/app/source_files training_pipeline
+  artifacts:
+    paths:
+      - model/
+  only:
+    - master
+
+# # Evaluation stage
+# evaluate:
+#   stage: evaluate
+#   script:
+#     - docker run --rm -v $(pwd)/model:/app/model evaluation-script:latest
+#   artifacts:
+#     paths:
+#       - evaluation_results/
+#   only:
+#     - master
+
+# Deploy stage (for prediction pipeline)
+deploy:
+  stage: deploy
+  script:
+    - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs prediction_pipeline
+  only:
+    - master
