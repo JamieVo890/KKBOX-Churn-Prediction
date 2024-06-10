@@ -12,7 +12,7 @@ build:
 train:
   stage: train
   script:
-    - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs -v %cd%/mlruns:/app/mlruns -v %cd%/config/:/app/config -v %cd%/params:/app/params  -v %cd%/source_files:/app/source_files training_pipeline
+    - docker run -v ${PWD}/artifacts:/app/artifacts -v ${PWD}/logs:/app/logs -v ${PWD}/mlruns:/app/mlruns -v ${PWD}/config/:/app/config -v ${PWD}/params:/app/params  -v ${PWD}/source_files:/app/source_files training_pipeline
   artifacts:
     paths:
       - model/
@@ -20,4 +20,4 @@ train:
 deploy:
   stage: deploy
   script:
-    - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs prediction_pipeline
+    - docker run -v ${PWD}/artifacts:/app/artifacts -v ${PWD}/logs:/app/logs prediction_pipeline
