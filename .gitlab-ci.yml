@@ -12,12 +12,12 @@ build:
 train:
   stage: train
   script:
-    - cd C:\KBBOX
-    - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs -v %cd%/mlruns:/app/mlruns -v %cd%/config/:/app/config -v %cd%/params:/app/params  -v %cd%/source_files:/app/source_files training_pipeline
-
+    - $PARENT_DIR = C:\KBBOX
+    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/mlruns:/app/mlruns -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/params:/app/params  -v $PARENT_DIR/source_files:/app/source_files training_pipeline
 
 deploy:
   stage: deploy
   script:
-    - xs C:\KBBOX
-    - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs prediction_pipeline
+    - $PARENT_DIR = C:\KBBOX
+    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs prediction_pipeline
+
