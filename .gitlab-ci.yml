@@ -14,16 +14,10 @@ train:
   script:
     - cd C:\KBBOX
     - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs -v %cd%/mlruns:/app/mlruns -v %cd%/config/:/app/config -v %cd%/params:/app/params  -v %cd%/source_files:/app/source_files training_pipeline
-  artifacts:
-    paths:
-      - model/
-  only:
-    - master
+
 
 deploy:
   stage: deploy
   script:
     - xs C:\KBBOX
     - docker run -v %cd%/artifacts:/app/artifacts -v %cd%/logs:/app/logs prediction_pipeline
-  only:
-    - master
