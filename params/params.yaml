@@ -1,9 +1,0 @@
-rf_param_grid:
-  n_estimators: [50, 100]
-  max_depth: [3, 5, 10, 100]
-            
-
-xgb_param_grid:
-  n_estimators: [50, 100]
-  learning_rate: [0.1, 0.01]
-  max_depth: [3, 5, 10, 100]
