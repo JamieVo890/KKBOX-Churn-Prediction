@@ -22,4 +22,4 @@ COPY src/logger.py src/
 COPY src/utils.py src/
 
 
-CMD ["python", "src/pipeline/train_pipeline.py"]
+CMD ["python", "src/pipeline/evaluation_pipeline.py"]
