@@ -33,7 +33,7 @@ evaluate:
   stage: evaluate_and_retrain
   script:
     - $PARENT_DIR = "C:\KBBOX"
-    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/evaluation:/app/evaluation evaluation_pipeline
+    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/evaluation_data:/app/evaluation_data evaluation_pipeline
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
