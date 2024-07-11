@@ -30,7 +30,9 @@ class EvaluationPipeline:
             X_test = np.load(self.evaluation_config.evaluation_X_path)
             y_test = np.load(self.evaluation_config.evaluation_y_path)
 
-            model = pickle.load(self.evaluation_config.final_model_path)
+            with open(self.evaluation_config.final_model_path, 'rb') as file:
+                model = pickle.load(file)
+
             
             # Load model 
             # Evaluate final model on test set
