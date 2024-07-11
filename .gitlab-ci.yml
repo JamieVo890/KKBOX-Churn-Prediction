@@ -2,12 +2,14 @@ stages:
   - build
   - train
   - deploy
+  - evaluate_and_retrain
 
 build:
   stage: build
   script:
     - docker buildx build -t training_pipeline -f training.Dockerfile .
     - docker buildx build -t prediction_pipeline -f prediction.Dockerfile .
+    - docker buildx build -t evaluation_pipeline -f evaluation.Dockerfile .
 
 train:
   stage: train
@@ -20,3 +22,27 @@ deploy:
   script:
     - $PARENT_DIR = "C:\KBBOX"
     - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -p 5000:5000 prediction_pipeline
+
+evaluate:
+  stage: evaluate_and_retrain
+  script:
+    - $PARENT_DIR = "C:\KBBOX"
+    - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/config/:/app/config evaluation_pipeline
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+retrain:
+  stage: evaluate_and_retrain
+  needs: [evaluate]
+  script:
+    - $PARENT_DIR = "C:\KBBOX"
+    - ACCURACY=$(cat $PARENT_DIR/artifacts/evaluation/accuracy.txt)
+    - echo "Model accuracy is $ACCURACY"
+    - if [ $(echo "$ACCURACY < 70" | bc -l) -eq 1 ]; then
+      - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/mlruns:/app/mlruns -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/params:/app/params  -v $PARENT_DIR/source_files:/app/source_files training_pipeline
+      else
+        echo "Accuracy above threshold. Skipping retraining.";
+      fi
+    
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"

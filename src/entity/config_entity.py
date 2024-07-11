@@ -26,3 +26,11 @@ class ModelTrainConfig:
     y_train_data_path: Path
     y_test_data_path: Path
     final_model_path: Path
+
+@dataclass
+class EvaluationConfig:
+    root_dir: Path
+    final_model_path: Path
+    evaluation_X_path: Path
+    evaluation_y_path: Path
+    accuracy_txt_path: Path
