@@ -41,14 +41,11 @@ retrain:
   stage: evaluate_and_retrain
   needs: [evaluate]
   script:
-    - $PARENT_DIR = "C:\KBBOX"
-    - ACCURACY=$(cat $PARENT_DIR/artifacts/evaluation/accuracy.txt)
-    - echo "Model accuracy is $ACCURACY"
-    - if [ $(echo "$ACCURACY < 70" | bc -l) -eq 1 ]; then
-      - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/mlruns:/app/mlruns -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/params:/app/params   -v $PARENT_DIR/source_files:/app/source_files training_pipeline
-      else
-        echo "Accuracy above threshold. Skipping retraining.";
-      fi
+    - $PARENT_DIR = "C:/KBBOX"
+    - $ACCURACY = Get-Content "$PARENT_DIR/artifacts/evaluation/accuracy.txt"
+    - Write-Host "Model accuracy is $ACCURACY"
+    - if ($ACCURACY -lt 70) {docker run -v "$PARENT_DIR/artifacts:/app/artifacts" -v "$PARENT_DIR/logs:/app/logs" -v "$PARENT_DIR/mlruns:/app/mlruns" -v "$PARENT_DIR/config/:/app/config" -v "$PARENT_DIR/params:/app/params" -v "$PARENT_DIR/source_files:/app/source_files" training_pipeline;} 
+      else {Write-Host "Accuracy above threshold. Skipping retraining.";}
     
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
