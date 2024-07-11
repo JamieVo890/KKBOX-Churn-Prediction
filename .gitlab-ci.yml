@@ -10,18 +10,24 @@ build:
     - docker buildx build -t training_pipeline -f training.Dockerfile .
     - docker buildx build -t prediction_pipeline -f prediction.Dockerfile .
     - docker buildx build -t evaluation_pipeline -f evaluation.Dockerfile .
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
 
 train:
   stage: train
   script:
     - $PARENT_DIR = "C:\KBBOX"
     - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -v $PARENT_DIR/mlruns:/app/mlruns -v $PARENT_DIR/config/:/app/config -v $PARENT_DIR/params:/app/params  -v $PARENT_DIR/source_files:/app/source_files training_pipeline
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
 
 deploy:
   stage: deploy
   script:
     - $PARENT_DIR = "C:\KBBOX"
     - docker run -v $PARENT_DIR/artifacts:/app/artifacts -v $PARENT_DIR/logs:/app/logs -p 5000:5000 prediction_pipeline
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
 
 evaluate:
   stage: evaluate_and_retrain
